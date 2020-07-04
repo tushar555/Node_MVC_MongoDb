@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header.ejs') %>
+
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <ul>
+        <% cart.forEach((pro)=>{ %>
+        <li>
+            <h4><%= pro.title %></h4>
+
+            <label>Quantity: <%= pro.quantity %></label>
+        </li>
+
+        <form action="/delete-cart-item" method="POST">
+            <input type="hidden" name="id" value="<%= pro._id %>">
+            <button type="submit" class="btn">Delete</button>
+        </form>
+        <hr>
+        <%});%>
+    </ul>
+
+    <div style="text-align: center;">
+        <form action="/order-checkout" method="POST">
+            <button class="btn" type="submit"> Order Now!</button>
+        </form>
+    </div>
+</body>
+
+</html>

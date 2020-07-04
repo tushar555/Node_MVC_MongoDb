@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header.ejs') %>
+
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <main style="width: 35%;">
+
+        <form action="<% if( editing==='true' ){ %> /edit-product <%}else{ %> /add-product <%} %>" method="POST">
+            <% if( editing==='true' ){ %>
+            <input type="hidden" name="id" id="id" value="<% if( editing==='true' ){ %> <%= product._id %> <%}%>">
+            <%} %>
+            <div class=" form-control">
+            <label>Book Title</label>
+            <input type="text" name="title" id="title" placeholder="Book Title" value="<% if( editing==='true' ){ %> <%= product.title %> <%}%>">
+            </div>
+            <div class="form-control">
+                <label>Image Url</label>
+                <input type="text" name="imgUrl" id="imgUrl" placeholder="Image Url" value="<% if( editing==='true' ){ %> <%= product.imageUrl %> <%}%>"">
+            </div>
+            <div class="form-control">
+                <label>Book Description</label>
+                <textarea name="description" id="description" rows="5" value="">
+
+<% if( editing==='true' ){ %> <%= product.description %> <%}%>
+                </textarea>
+                <!-- <input type="text" name="description" id="description" placeholder="Book description"> -->
+            </div>
+            <div class="form-control">
+                <label>Book Price </label>
+                <input type=" number" name="price" step="0.01" id="price" value="<% if( editing==='true' ){ %> <%= product.price %> <%}%>"" placeholder="Book Price">
+            </div>
+            <button class="btn" type="submit">
+                <% if(editing==='true'){ %>Update Product <% }else{ %> Add Product <%}%>
+            </button>
+        </form>
+    </main>
+</body>
+
+</html>

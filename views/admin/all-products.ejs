@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../includes/header.ejs') %>
+
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <main>
+        <% if(isProductavailable){%>
+        <div class="grid">
+
+            <% products.forEach((pro)=>{ %>
+            <article class="card product-item">
+                <header class="card__header">
+                    <h1 class="product__title"><%= pro.title %></h1>
+                </header>
+                <div class="card__image">
+                    <img src="<%= pro.imageUrl %>" alt="A Book">
+                </div>
+                <div class="card__content">
+                    <h2 class="product__price"><%= pro.price %></h2>
+                    <p class="product__description"><%= pro.description %>
+                    </p>
+                </div>
+                <div class="card__actions">
+
+                    <a class="btn" href="/edit-product/<%= pro._id%>?edit=true">Edit</a>
+                    <!-- <button class="btn">Edit</button> -->
+                    <form action="/delete-product/<%= pro._id %>" method="POST">
+                        <button class="btn">Delete</button>
+                    </form>
+                </div>
+            </article>
+
+            <%  }) %>
+
+        </div>
+        <% } else{ %>
+        <h4>No Products.</h4>
+        <% } %>
+    </main>
+</body>
+
+</html>
