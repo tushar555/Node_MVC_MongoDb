@@ -2,7 +2,7 @@ const Product = require('../model/product-model');
 
 exports.getAddProducts = (req, res, next) => {
     res.render('admin/edit-product', {
-        docTitle: 'Add Product', path: '/add-product', editing: false
+        docTitle: 'Add Product', path: '/add-product', editing: false, isAuthenticateUser: req.user
     })
 }
 
@@ -33,7 +33,7 @@ exports.getEditProduct = (req, res, next) => {
         res.render('admin/edit-product', {
             docTitle: 'Add Product', path: '/edit-product',
             editing: edit,
-            product: product
+            product: product, isAuthenticateUser: req.user
         })
     })
     // req.user.getProducts({ where: { id: id } }).then(product => {
@@ -87,7 +87,7 @@ exports.showAllAdminProducts = (req, res, next) => {
             docTitle: 'All Admin Products',
             path: '/admin-all-products',
             products: products,
-            isProductavailable: products.length > 0,
+            isProductavailable: products.length > 0, isAuthenticateUser: req.user
 
 
         })

@@ -10,12 +10,23 @@ const path = require('path');
 const mainPath = require('./util/path');
 const errorController = require('./controllers/error-controller');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const User = require('./model/user-model');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+
+
+const store = new MongoDBStore({
+    uri: "mongodb+srv://tusharsaindane02:FTOXXjTSl92P4BAq@cluster0-golou.mongodb.net/shop",
+    collection: 'session'
+
+})
+
+app.use(session({ secret: 'my secrete', resave: false, saveUninitialized: false, store: store }))
 app.use((req, res, next) => {
-    User.findById('5f03665895758af9bcb121d8').then((user) => {
+    User.findById(req.session.user._id).then((user) => {
         req.user = user;
         next();
     })

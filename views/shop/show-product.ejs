@@ -27,7 +27,7 @@
                         <button class="btn" type="submit">Add to cart</button>
                         <input type="hidden" name="productId" value="<%=  pro.id%>">
                     </form> -->
-                    <%- include('../includes/add-cart.ejs',{product:pro}) %>
+                    <%- include('../includes/add-cart.ejs',{product:pro, isAuthenticateUser:isAuthenticateUser}) %>
                 </div>
             </article>
 

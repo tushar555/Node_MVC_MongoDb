@@ -12,7 +12,7 @@ exports.viewProducts = (req, res, next) => {
             docTitle: 'Show Products',
             path: '/products',
             products: pro,
-            isProductavailable: pro.length > 0,
+            isProductavailable: pro.length > 0, isAuthenticateUser: req.user
 
         })
     }).catch(error => { console.log(error) })
@@ -27,7 +27,7 @@ exports.viewProductsDetails = (req, res, next) => {
         res.render('shop/product-details', {
             docTitle: 'Product details',
             path: '/product-details',
-            product: pr
+            product: pr, isAuthenticateUser: req.user
         })
     })
 }
@@ -39,7 +39,7 @@ exports.getIndex = (req, res, next) => {
             docTitle: 'Show Products',
             path: '/',
             products: resp,
-            isProductavailable: resp.length > 0,
+            isProductavailable: resp.length > 0, isAuthenticateUser: req.user
 
         })
     })
@@ -51,7 +51,7 @@ exports.showCartProducts = (req, res, next) => {
     req.user.populate('cart.items.productId').execPopulate().then((product) => {
         console.log(product.cart.items)
         const products = product.cart.items;
-        res.render('shop/cart', { docTitle: 'Your Cart', path: '/cart', cart: products })
+        res.render('shop/cart', { docTitle: 'Your Cart', path: '/cart', cart: products, isAuthenticateUser: req.user })
     })
     // req.user.getCart().then((cart) => {
     //     return cart.getProducts().then((product) => {
@@ -107,7 +107,7 @@ exports.getOrder = (req, res, next) => {
 
     Order.find({ userId: req.user._id }).then((orders) => {
 
-        res.render('shop/order', { docTitle: 'My Orders', path: '/order', orders: orders })
+        res.render('shop/order', { docTitle: 'My Orders', path: '/order', orders: orders, isAuthenticateUser: req.user })
     })
 
 }
