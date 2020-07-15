@@ -9,25 +9,24 @@
 
         <div> <%= errorMessage%> </div>
         <%}%>
-        <form action="/login" method="POST">
+        <form action="/sign-up" method="POST">
             <div class="form-control">
                 <label>E-mail</label>
                 <input type="text" name="email" id="email">
             </div>
-          
             <div class="form-control">
                 <label>Password</label>
                 <input type="password" name="password" id="password">
             </div>
+            <div class="form-control">
+                <label>Confirm Password</label>
+                <input type="password" name="confirmpassword" id="confirmpassword">
+            </div>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <button class="btn" type="submit">
-            Login
+            Sign up
         </button>
         </form>
-        <div style="text-align: center;">
-            <a href="/reset">Reset Password</label>
-
-        </div>
     </main>
 </body>
 

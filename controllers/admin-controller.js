@@ -1,8 +1,9 @@
 const Product = require('../model/product-model');
 
 exports.getAddProducts = (req, res, next) => {
+
     res.render('admin/edit-product', {
-        docTitle: 'Add Product', path: '/add-product', editing: false, isAuthenticateUser: req.user
+        docTitle: 'Add Product', path: '/add-product', editing: false
     })
 }
 
@@ -33,7 +34,7 @@ exports.getEditProduct = (req, res, next) => {
         res.render('admin/edit-product', {
             docTitle: 'Add Product', path: '/edit-product',
             editing: edit,
-            product: product, isAuthenticateUser: req.user
+            product: product
         })
     })
     // req.user.getProducts({ where: { id: id } }).then(product => {
@@ -57,6 +58,11 @@ exports.postEditProductsDetails = (req, res, next) => {
 
 
     Product.findById(id).then(product => {
+
+        if (product.userId !== req.user._id) {
+            res.redirect('/')
+        }
+
         product.title = title;
         product.price = price;
         product.description = description;
@@ -81,13 +87,13 @@ exports.postEditProductsDetails = (req, res, next) => {
 
 exports.showAllAdminProducts = (req, res, next) => {
 
-    Product.find().then((products) => {
+    Product.find({ userId: req.user._id }).then((products) => {
 
         res.render('admin/all-products', {
             docTitle: 'All Admin Products',
             path: '/admin-all-products',
             products: products,
-            isProductavailable: products.length > 0, isAuthenticateUser: req.user
+            isProductavailable: products.length > 0
 
 
         })
@@ -99,7 +105,7 @@ exports.showAllAdminProducts = (req, res, next) => {
 
 exports.postdeleteProductsDetails = (req, res, next) => {
     const productId = req.params.productId;
-    Product.deleteOne({ _id: productId }).then((pr) => {
+    Product.deleteOne({ _id: productId, userId: req.user._id }).then((pr) => {
         console.log(pr)
         res.redirect('/admin-all-products')
     })

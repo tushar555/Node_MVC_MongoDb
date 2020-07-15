@@ -30,6 +30,8 @@
                 <label>Book Price </label>
                 <input type=" number" name="price" step="0.01" id="price" value="<% if( editing==='true' ){ %> <%= product.price %> <%}%>"" placeholder="Book Price">
             </div>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
             <button class="btn" type="submit">
                 <% if(editing==='true'){ %>Update Product <% }else{ %> Add Product <%}%>
             </button>

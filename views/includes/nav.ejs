@@ -12,13 +12,24 @@
                     Product</a></li>
             <li class="main-header__item"><a class="<%= path==='/admin-all-products'?'active':'' %>"
                     href="/admin-all-products">Admin All Products</a></li>
-            <% }%>
-
-            <li class="main-header__item"><a class="<%= path==='/login'?'active':'' %>" href="/login">Login</a></li>
             <form action="/logout" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
                 <button class="main-header__item">Logout</button>
 
             </form>
+            <% }else{ %>
+            <li class="main-header__item"><a class="<%= path==='/login'?'active':'' %>" href="/login">Login</a></li>
+            <li class="main-header__item"><a class="<%= path==='/sign-up'?'active':'' %>" href="/sign-up">Sign up</a>
+            </li>
+
+
+            <%}%>
+
+
+          
+
+           
 
         </ul>
     </nav>
