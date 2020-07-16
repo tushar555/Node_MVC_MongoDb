@@ -1,9 +1,11 @@
 const Product = require('../model/product-model');
-
+const { validationResult } = require('express-validator/check')
 exports.getAddProducts = (req, res, next) => {
 
     res.render('admin/edit-product', {
-        docTitle: 'Add Product', path: '/add-product', editing: false
+        docTitle: 'Add Product', path: '/add-product', editing: false,
+        hasError: false,
+        errorMessage: null
     })
 }
 
@@ -14,6 +16,15 @@ exports.postAddProducts = (req, res, next) => {
     let description = req.body.description
     let price = req.body.price
     let userId = req.user;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('admin/edit-product', {
+            docTitle: 'Add Product', path: '/add-product', editing: false,
+            hasError: true,
+            errorMessage: errors.array()[0].msg,
+            product: { title: title, imageUrl: imageUrl, description: description, price: price }
+        })
+    }
     const product = new Product({ title, price, description, imageUrl, userId })
     product.save((result) => {
         //  console.log(result)
@@ -34,7 +45,9 @@ exports.getEditProduct = (req, res, next) => {
         res.render('admin/edit-product', {
             docTitle: 'Add Product', path: '/edit-product',
             editing: edit,
-            product: product
+            product: product,
+            errorMessage: null,
+            hasError: false
         })
     })
     // req.user.getProducts({ where: { id: id } }).then(product => {
@@ -51,15 +64,24 @@ exports.postEditProductsDetails = (req, res, next) => {
     let price = req.body.price
     let description = req.body.description
     let id = req.body.id.trim()
-    // const updatedProduct = { ...product }
-    // delete updatedProduct['id'];
-    // delete updatedProduct['imgUrl'];
-    // updatedProduct.imageUrl = imageUrl;
+    let edit = req.query.edit
 
+    const errors = validationResult(req);
+    console.log(errors)
+    if (!errors.isEmpty()) {
+        return res.status(422).render('admin/edit-product', {
+            docTitle: 'Edit Product', path: '/edit-product', editing: true,
+            errorMessage: errors.array()[0].msg,
+            hasError: true,
+            product: { _id: id, title: title, imageUrl: imageUrl, description: description, price: price }
+        })
+
+    }
+    console.log('idid', id, title)
 
     Product.findById(id).then(product => {
 
-        if (product.userId !== req.user._id) {
+        if (product.userId.toString() !== req.user._id.toString()) {
             res.redirect('/')
         }
 
