@@ -4,8 +4,9 @@ const Product = require('../model/product-model');
 const Order = require('../model/order-model');
 // // const OrderItem = require('../model/order-item-model');
 // const { showAllAdminProducts } = require('./admin-controller');
-
-
+const path = require('path');
+const fs = require('fs');
+const pdfcontent = require('pdfkit');
 exports.viewProducts = (req, res, next) => {
     Product.find().then((pro) => {
         res.render('shop/show-product', {
@@ -110,6 +111,37 @@ exports.getOrder = (req, res, next) => {
         res.render('shop/order', { docTitle: 'My Orders', path: '/order', orders: orders })
     })
 
+}
+
+exports.getInvoice = (req, res, next) => {
+    console.log(req.params.orderId)
+    const fileName = req.params.orderId + '.pdf'
+    console.log(fileName)
+    const Invoicepath = path.join('data', 'Invoices', fileName);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline');
+    const pdf = new pdfcontent();
+
+    pdf.pipe(fs.createWriteStream(Invoicepath));
+    pdf.pipe(res)
+
+    pdf.text('Invoice')
+    pdf.text('------------------------------------')
+
+
+
+    pdf.end();
+    //const stream = fs.createReadStream(Invoicepath);
+    // stream.pipe(res)    
+    // fs.readFile(Invoicepath, (err, resp) => {
+    //     if (err) {
+    //         return next(err)
+    //     }
+    //     res.setHeader('Content-Type', 'application/pdf');
+    //     res.setHeader('Content-Disposition', 'inline')
+    //     res.send(resp);
+    // })
 }
 
 

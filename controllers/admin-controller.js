@@ -1,6 +1,8 @@
 const Product = require('../model/product-model');
 const { validationResult } = require('express-validator/check');
 const { ObjectId } = require('mongodb');
+const fileHelper = require('../util/file');
+
 exports.getAddProducts = (req, res, next) => {
 
     res.render('admin/edit-product', {
@@ -12,20 +14,34 @@ exports.getAddProducts = (req, res, next) => {
 
 
 exports.postAddProducts = (req, res, next) => {
+    console.log('HELLLLOOOO')
     let title = req.body.title
-    let imageUrl = req.body.imgUrl
+    let image = req.file
     let description = req.body.description
     let price = req.body.price
     let userId = req.user;
     const errors = validationResult(req);
+
+    if (!image) {
+        return res.status(422).render('admin/edit-product', {
+            docTitle: 'Add Product', path: '/add-product', editing: false,
+            hasError: true,
+            errorMessage: "Invalid File Format",
+            product: { title: title, description: description, price: price }
+        })
+    }
+
+
     if (!errors.isEmpty()) {
         return res.render('admin/edit-product', {
             docTitle: 'Add Product', path: '/add-product', editing: false,
             hasError: true,
             errorMessage: errors.array()[0].msg,
-            product: { title: title, imageUrl: imageUrl, description: description, price: price }
+            product: { title: title, description: description, price: price }
         })
     }
+
+    const imageUrl = image.path;
     const product = new Product({ title, price, description, imageUrl, userId })
     product.save().then(result => {
         //  console.log(result)
@@ -66,24 +82,33 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProductsDetails = (req, res, next) => {
     let title = req.body.title
-    let imageUrl = req.body.imgUrl
+    let image = req.file
     let price = req.body.price
     let description = req.body.description
     let id = req.body.id.trim()
     let edit = req.query.edit
 
     const errors = validationResult(req);
+    if (!image) {
+        return res.status(422).render('admin/edit-product', {
+            docTitle: 'Add Product', path: '/add-product', editing: true,
+            hasError: true,
+            errorMessage: "Invalid File Format",
+            product: { title: title, description: description, price: price }
+        })
+    }
+
+
     console.log(errors)
     if (!errors.isEmpty()) {
         return res.status(422).render('admin/edit-product', {
             docTitle: 'Edit Product', path: '/edit-product', editing: true,
             errorMessage: errors.array()[0].msg,
             hasError: true,
-            product: { _id: id, title: title, imageUrl: imageUrl, description: description, price: price }
+            product: { _id: id, title: title, description: description, price: price }
         })
 
     }
-    console.log('idid', id, title)
 
     Product.findById(id).then(product => {
 
@@ -94,7 +119,7 @@ exports.postEditProductsDetails = (req, res, next) => {
         product.title = title;
         product.price = price;
         product.description = description;
-        product.imageUrl = imageUrl;
+        product.imageUrl = image.path;
 
         product.save().then(result => {
             res.redirect('/admin-all-products')
@@ -133,9 +158,14 @@ exports.showAllAdminProducts = (req, res, next) => {
 
 exports.postdeleteProductsDetails = (req, res, next) => {
     const productId = req.params.productId;
+    Product.findById({ _id: productId }).then((pro) => {
+        fileHelper.deleteFile(pro.imageUrl);
+    })
     Product.deleteOne({ _id: productId, userId: req.user._id }).then((pr) => {
         console.log(pr)
         res.redirect('/admin-all-products')
+    }).catch(err => {
+        next(err)
     })
 
 }

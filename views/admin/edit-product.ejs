@@ -10,7 +10,7 @@
         <div> <%= errorMessage%> </div>
         <%}%>
         <form action="<% if( editing==='true' || hasError ){ %> /edit-product <%}else{ %> /add-product <%} %>"
-        method="POST">
+        method="POST" enctype="multipart/form-data">
         <% if( editing==='true'|| hasError ){ %>
 
         <input type="hidden" name="id" id="id" value="<% if( editing==='true'|| hasError){ %> <%= product._id %> <%}%>">
@@ -19,10 +19,14 @@
         <label>Book Title</label>
         <input type="text" name="title" id="title" placeholder="Book Title" value="<% if( editing==='true' || hasError ){ %> <%= product.title %> <%}%>">
         </div>
-        <div class="form-control">
+        <!-- <div class="form-control">
             <label>Image Url</label>
             <input type="text" name="imgUrl" id="imgUrl" placeholder="Image Url"
                 value="<% if( editing==='true' || hasError ){ %> <%= product.imageUrl %> <%} %>">
+        </div> -->
+        <div class="form-control">
+            <label>Image </label>
+            <input type="file" name="image" id="image" placeholder="Image">
         </div>
         <div class=" form-control">
             <label>Book Description</label>
@@ -40,7 +44,7 @@
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
         <button class="btn" type="submit">
-            <% if(editing==='true' || hasError){ %>Update Product <% }else{ %> Add Product <%}%>
+            <% if(editing==='true'){ %>Update Product <% }else{ %> Add Product <%}%>
             </button>
         </form>
     </main>

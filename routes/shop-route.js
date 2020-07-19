@@ -18,6 +18,8 @@ router.get('/products/:productId', isAuth, shopController.viewProductsDetails);
 router.post('/order-checkout', isAuth, shopController.postOrder)
 // // router.get('/checkout', shopController.getCheckout);
 router.get('/order', isAuth, shopController.getOrder)
+
+router.get('/order/:orderId', shopController.getInvoice)
 exports.routes = router;
 
 
