@@ -7,7 +7,8 @@
     <main>
         <% if(isProductavailable){%>
         <div class="grid">
-
+            <%= TotalPages %>
+            <%= hasNext %>
             <% products.forEach((pro)=>{ %>
             <article class="card product-item">
                 <header class="card__header">
@@ -32,6 +33,11 @@
 
             <%  }) %>
 
+        </div>
+        <div class="pagination">
+            <a href="/?page=1">1</a>
+            <a href="/?page=2">2</a>
+            <a href="/?page=3">3</a>
         </div>
         <% } else{ %>
         <h4>No Products.</h4>

@@ -193,6 +193,19 @@ form {
   color: white;
 }
 
+
+.pagination a{
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem;
+  border:1px solid #00695c;
+  text-decoration: none;
+}
+
+.pagination{
+   float: right;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;

@@ -169,3 +169,16 @@ exports.postdeleteProductsDetails = (req, res, next) => {
     })
 
 }
+
+exports.postdeleteProduct = (req, res, next) => {
+    const productId = req.params.productId;
+    Product.findById({ _id: productId }).then((pro) => {
+        fileHelper.deleteFile(pro.imageUrl);
+    })
+    Product.deleteOne({ _id: productId, userId: req.user._id }).then((pr) => {
+        res.status(200).json({ "message": "Success" });
+    }).catch(err => {
+        res.status(500).json({ "message": "fail" });
+    })
+
+}
