@@ -159,6 +159,24 @@ exports.getInvoice = (req, res, next) => {
 }
 
 
+exports.getCheckout = (req, res, next) => {
+
+    req.user.populate('cart.items.productId').execPopulate().then((product) => {
+        console.log(product.cart.items)
+        const products = product.cart.items;
+
+        res.render('shop/checkout', {
+            docTitle: 'Checkout',
+            path: '/checkout',
+            cart: products,
+            totalSum: products.reduce((sum, ele) => sum + (ele.quantity * ele.productId.price), 0)
+        })
+    })
+
+
+}
+
+
 
 
 

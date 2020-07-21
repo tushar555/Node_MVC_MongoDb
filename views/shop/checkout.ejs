@@ -4,7 +4,29 @@
 
 <body>
     <%- include('../includes/nav.ejs') %>
-    <h3>Checkout</h3>
+    <ul>
+        <% cart.forEach((pro)=>{ %>
+        <li>
+            <h4><%= pro.productId.title %></h4>
+
+            <label>Quantity: <%= pro.quantity %></label>
+        </li>
+
+        <hr>
+        <%});%>
+    </ul>
+
+    <div style="text-align: center;">
+        <!-- <form action="/order-checkout" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    
+                <button class="btn" type="submit"> Order Now!</button>
+            </form> -->
+        <label>Total Sum:</label>
+        <p><%= totalSum%></p>
+        <a href="/checkout" class="btn"> Order Now!</a>
+
+    </div>
 </body>
 
 </html>
